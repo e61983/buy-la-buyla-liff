@@ -1,28 +1,51 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="container mt-3">
+    <router-view v-if="initialized"></router-view>
+    <loading
+      v-else
+      loader="dots"
+      :active.sync="api_loading"
+      :can-cancel="false"
+      :is-full-page="false"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  name: "app",
+  data: () => ({
+    api_loading: false,
+    initialized: false
+  }),
+  created: function() {
+    console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`process.env.VUE_APP_LIFF_ID: ${process.env.VUE_APP_LIFF_ID}`);
+  },
+  mounted: function() {
+    this.init_liff();
+  },
+  methods: {
+    init_liff() {
+      this.api_loading = true;
+      this.$liff.init(
+        {
+          liffId: process.env.VUE_APP_LIFF_ID
+        },
+        data => {
+          this.initialized = true;
+          this.api_loading = false;
+        },
+        err => {
+          console.log("LIFF initialization failed", err);
+          this.api_loading = false;
+        }
+      );
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+@import "~bootstrap/scss/bootstrap";
 </style>
