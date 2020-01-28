@@ -48,6 +48,11 @@ export default {
     show_records() {
       return this.record;
     }
+  },
+  methods: {
+    same_as(goods) {
+      this.$store.dispatch("set_current_goods", goods);
+    }
   }
 };
 </script>

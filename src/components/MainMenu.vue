@@ -7,13 +7,6 @@
           <div class="col-12" v-if="current_record !== null">
             <OrderEditor :record="current_record" />
           </div>
-          <loading
-            v-else
-            loader="bars"
-            :active.sync="is_profile_loading"
-            :can-cancel="false"
-            :is-full-page="false"
-          />
 
           <!-- records -->
           <div class="col-12" v-if="records !==null">
@@ -21,13 +14,6 @@
               <Record :record="record" />
             </div>
           </div>
-          <loading
-            v-else
-            loader="dots"
-            :active.sync="is_records_loading"
-            :can-cancel="false"
-            :is-full-page="false"
-          />
         </div>
       </div>
       <!-- context information -->
@@ -42,7 +28,8 @@
         />
         <div class="collapse multi-collapse" id="context">
           <div class="card card-body">
-            <span>context: {{ liff_context }}</span>
+            <span>liff context: {{ liff_context }}</span>
+            <span>order group: {{ order_group }}</span>
           </div>
         </div>
       </div>
@@ -60,56 +47,27 @@ export default {
     title: String
   },
   mounted() {
-    let vm = this;
-    vm.liff_context = vm.$liff.getContext();
-    console.log("liff_context:" + vm.liff_context);
-    let gid = "";
-    if (process.env.NODE_ENV === "development") {
-      if (gid === "") {
-        gid = "test";
-      }
-    }
-    console.log("gid:" + gid);
-
-    const base_url = process.env.VUE_APP_API_SERVER_BASE;
-    const url = base_url + "/" + gid + "/orders";
-    vm.$http.get(url).then(resp => {
-      vm.records = resp.data;
-    });
-    vm.$liff
-      .getProfile()
-      .then(profile => {
-        vm.current_record = {
-          user_profile: {
-            display_name: profile.displayName,
-            photo_url: profile.pictureUrl
-          },
-          goods: []
-        };
-      })
-      .catch(err => {
-        console.log("error", err);
-      });
+    this.$store.dispatch("set_is_loading", true);
+    this.$store.dispatch("get_records");
+    this.$store.dispatch("get_current_record");
+    this.$store.dispatch("set_is_loading", false);
   },
-  data() {
-    return {
-      is_profile_loading: false, // for test
-      is_records_loading: true,
-      liff_context: null,
-      current_record: null,
-      records: null
-    };
-  },
-  watch: {
-    current_record() {
-      if (this.current_record !== null) {
-        this.is_profile_loading = false;
-      }
-    },
+  computed: {
     records() {
-      if (this.records !== null) {
-        this.is_records_loading = false;
-      }
+      return this.$store.state.records;
+    },
+    liff_context() {
+      return this.$store.state.liff_context;
+    },
+    order_group(){
+      return this.$store.state.gid;
+    },
+    current_record() {
+      let vm = this;
+      return {
+        user_profile: vm.$store.state.user_profile,
+        goods: vm.$store.state.current_goods
+      };
     }
   }
 };

@@ -21,11 +21,11 @@
             >
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="item_name">品項</label>
+                  <label :for="'item_name'+index">品項</label>
                   <input
                     class="form-control"
                     type="text"
-                    id="item_name"
+                    :id="'item_name'+index"
                     placeholder="請輸入品名"
                     v-model="good.item_name"
                   />
@@ -33,11 +33,11 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="sweeting_level">甜度</label>
+                  <label :for="'sweeting_level'+index">甜度</label>
                   <select
                     class="form-control"
                     type="text"
-                    id="sweeting_level"
+                    :id="'sweeting_level'+index"
                     v-model="good.sweetness_level"
                   >
                     <option value="正常" selected>正常</option>
@@ -50,11 +50,11 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="amount_of_icd">冰量</label>
+                  <label :for="'amount_of_icd'+index">冰量</label>
                   <select
                     class="form-control"
                     type="text"
-                    id="amount_of_icd"
+                    :id="'amount_of_icd'+index"
                     v-model="good.amount_of_ice"
                   >
                     <option value="正常" selected>正常</option>
@@ -69,8 +69,8 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="number">大小</label>
-                  <select class="form-control" type="text" id="size" v-model="good.size">
+                  <label :for="'size'+index">大小</label>
+                  <select class="form-control" type="text" :id="'size'+index" v-model="good.size">
                     <option value="L" selected>L</option>
                     <option value="M">M</option>
                     <option value="S">S</option>
@@ -80,8 +80,13 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="number">數量</label>
-                  <select class="form-control" type="number" id="number" v-model="good.number">
+                  <label :for="'number'+index">數量</label>
+                  <select
+                    class="form-control"
+                    type="number"
+                    :id="'number'+index"
+                    v-model="good.number"
+                  >
                     <option value="1" selected>1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -92,11 +97,11 @@
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="item_name">備註</label>
+                  <label :for="'comment'+index">備註</label>
                   <input
                     class="form-control"
                     type="text"
-                    id="comment"
+                    :id="'comment'+index"
                     placeholder="(Optional) 想附註的事"
                     v-model="good.comment"
                   />
@@ -135,7 +140,7 @@
         </div>
       </div>
     </div>
-    <SumitCheck id="sumitModal" :record="record"/>
+    <SumitCheck id="sumitModal" :record="record" />
   </div>
 </template>
 

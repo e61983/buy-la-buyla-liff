@@ -14,10 +14,11 @@
 <script>
 export default {
   name: "app",
-  data: () => ({
-    api_loading: false,
-    initialized: false
-  }),
+  data() {
+    return {
+      initialized: false
+    };
+  },
   created: function() {
     console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
     console.log(`process.env.VUE_APP_LIFF_ID: ${process.env.VUE_APP_LIFF_ID}`);
@@ -25,20 +26,23 @@ export default {
   mounted: function() {
     this.init_liff();
   },
+  computed: {
+    api_loading() {
+      return this.$store.state.is_loading;
+    }
+  },
   methods: {
     init_liff() {
-      this.api_loading = true;
-      this.$liff.init(
+      let vm = this;
+      vm.$liff.init(
         {
           liffId: process.env.VUE_APP_LIFF_ID
         },
-        data => {
-          this.initialized = true;
-          this.api_loading = false;
+        () => {
+          vm.initialized = true;
         },
         err => {
           console.log("LIFF initialization failed", err);
-          this.api_loading = false;
         }
       );
     }

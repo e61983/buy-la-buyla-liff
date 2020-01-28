@@ -22,6 +22,7 @@ export default new VueRouter({
     },
     {
       path: '*',
+      name: 'Unknow',
       redirect: { name: 'Login' }
     },
   ]
