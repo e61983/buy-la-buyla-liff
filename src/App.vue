@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container mt-3">
+    <Alert id="msg" msg="Ops~" state="alert-danger" />
     <router-view v-if="initialized"></router-view>
     <loading
       v-else
@@ -12,19 +13,27 @@
 </template>
 
 <script>
+import Alert from "@/components/Alert.vue";
 export default {
   name: "app",
+  components: { Alert },
   data() {
     return {
       initialized: false
     };
   },
-  created: function() {
+  created() {
+    console.log(this.$options.name, "created")
     console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
     console.log(`process.env.VUE_APP_LIFF_ID: ${process.env.VUE_APP_LIFF_ID}`);
-  },
-  mounted: function() {
     this.init_liff();
+  },
+  BeforeMount() {
+    console.log(this.$options.name, "BeforeMount")
+  },
+  beforeDestroy(){
+    console.log(this.$options.name, "BeforeMount")
+    this.$liff.logout()
   },
   computed: {
     api_loading() {
@@ -39,6 +48,7 @@ export default {
           liffId: process.env.VUE_APP_LIFF_ID
         },
         () => {
+          vm.$store.dispatch('set_is_loading',false)
           vm.initialized = true;
         },
         err => {

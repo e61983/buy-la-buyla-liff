@@ -16,7 +16,7 @@
           <div class="card">
             <div class="card-body">
               <div class="row align-items-center flex-column">
-                <div class="col">
+                <div class="col text-left">
                   <ul class="mb-0" v-for="(good, sub_index) in record.goods" :key="sub_index">
                     <li>
                       {{good.item_name}} {{good.sweetness_level}} {{good.amount_of_ice}} {{good.size}} *
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     same_as(goods) {
-      this.$store.dispatch("set_current_goods", goods);
+      this.$store.dispatch("goods_same_as", goods);
     }
   }
 };

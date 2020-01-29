@@ -4,6 +4,18 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+function new_timestamp() {
+    var d = Date.now();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+        d += performance.now(); //use high-precision timer if available
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}
+
 export default new Vuex.Store({
     state: {
         is_loading: true,
@@ -14,6 +26,7 @@ export default new Vuex.Store({
         uid: "",
         records: null,
         current_goods: [],
+        messages: [],
     },
     actions: {
         set_is_loading(context, payload) {
@@ -25,8 +38,37 @@ export default new Vuex.Store({
         set_gid(context, payload) {
             context.commit('SET_GID', payload);
         },
-        set_current_goods(context, payload) {
-            context.commit('SET_CURRENT_GOODS', payload);
+        add_good(context, payload) {
+            payload.id = new_timestamp()
+            context.commit('ADD_GOOD', payload);
+        },
+        remove_good(context, payload) {
+            context.commit('REMOVE_GOOD', payload);
+        },
+        goods_same_as(context, payload) {
+            context.commit('GOODS_SAME_AS', payload);
+        },
+        remove_all_goods(context) {
+            context.commit('REMOVE_ALL_GOODS');
+        },
+        add_message(context, payload) {
+            const timestamp = new_timestamp();
+            context.commit('ADD_MESSAGE', {
+                message: payload.message,
+                status: payload.status,
+                timestamp
+            });
+            const vm = this;
+            setTimeout(() => {
+                vm.state.messages.forEach((item, i) => {
+                    if (item.timestamp === timestamp) {
+                        context.commit('REMOVE_MESSAGE', i);
+                    }
+                });
+            }, 5000);
+        },
+        remove_message(context, payload) {
+            context.commit('REMOVE_MESSAGE', payload);
         },
         get_liff_context(context) {
             context.commit('GET_LIFF_CONTEXT', window.liff.getContext());
@@ -57,7 +99,7 @@ export default new Vuex.Store({
         get_records(context) {
             let vm = this
             const base_url = process.env.VUE_APP_API_SERVER_BASE;
-            const url = base_url + "/" + vm.state.gid + "/orders";
+            const url = new URL(String(vm.state.gid) + "/orders", base_url).toString()
             context.commit('SET_IS_LOADING', true);
             axios.get(url).then(resp => {
                 context.commit('GET_RECORDS', resp.data);
@@ -80,8 +122,35 @@ export default new Vuex.Store({
         SET_GID(state, payload) {
             state.gid = payload
         },
-        SET_CURRENT_GOODS(state, payload) {
-            state.current_goods = payload
+        ADD_GOOD(state, payload) {
+            state.current_goods.push(payload);
+        },
+        REMOVE_GOOD(state, payload) {
+            state.current_goods.forEach((item, i) => {
+                if (item.id === payload) {
+                    state.current_goods.splice(i, 1);
+                }
+            });
+        },
+        GOODS_SAME_AS(state, payload) {
+            state.current_goods.splice(0, state.current_goods.length);
+            payload.forEach((good) => {
+                good.id = new_timestamp()
+                state.current_goods.push(good);
+            });
+        },
+        REMOVE_ALL_GOODS(state) {
+            state.current_goods.splice(0, state.current_goods.length);
+        },
+        ADD_MESSAGE(state, payload) {
+            state.messages.push({
+                message: payload.message,
+                status: payload.status,
+                timestamp: payload.timestamp
+            });
+        },
+        REMOVE_MESSAGE(state, payload) {
+            state.messages.splice(payload, 1);
         },
         GET_LIFF_CONTEXT(state, payload) {
             state.liff_context = payload

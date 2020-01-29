@@ -46,8 +46,17 @@ export default {
   props: {
     title: String
   },
+  created() {
+    console.log(this.$options.name, "created");
+  },
+  beforeMount() {
+    console.log(this.$options.name, "beforeMount");
+  },
   mounted() {
+    console.log(this.$options.name, "mounted");
     this.$store.dispatch("set_is_loading", true);
+    this.$store.dispatch("get_liff_context");
+    this.$store.dispatch("get_user_profile");
     this.$store.dispatch("get_records");
     this.$store.dispatch("get_current_record");
     this.$store.dispatch("set_is_loading", false);
@@ -59,7 +68,7 @@ export default {
     liff_context() {
       return this.$store.state.liff_context;
     },
-    order_group(){
+    order_group() {
       return this.$store.state.gid;
     },
     current_record() {

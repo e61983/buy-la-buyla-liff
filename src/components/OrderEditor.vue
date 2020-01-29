@@ -13,148 +13,156 @@
       </div>
       <div class="col-md-9 col-12">
         <div class="border" style="border-radius: 5px;">
-          <form action>
-            <div
-              class="form-row mx-sm-2 mx-1 mt-2"
-              v-for="(good,index) in record.goods"
-              :key="index"
-            >
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label :for="'item_name'+index">品項</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    :id="'item_name'+index"
-                    placeholder="請輸入品名"
-                    v-model="good.item_name"
-                  />
+          <ValidationObserver v-slot="{ handleSubmit, reset  }">
+            <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset">
+              <div
+                class="form-row mx-sm-2 mx-1 mt-2 border"
+                v-for="(good,index) in record.goods"
+                :key="good.id"
+                style="border-radius: 5px;"
+              >
+                <div class="col-12">
+                  <div class="form-group">
+                    <label :for="'item_name'+index">*品項</label>
+                    <ValidationProvider :name="'品名'+(index+1)" rules="required" v-slot="{ errors }">
+                      <input
+                        class="form-control"
+                        type="text"
+                        :id="'item_name'+good.id"
+                        :placeholder="'請輸入品名'+(index+1)"
+                        v-model="good.item_name"
+                      />
+                      <span class="text-danger">{{ errors[0] }}</span>
+                    </ValidationProvider>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label :for="'sweeting_level'+index">甜度</label>
+                    <select
+                      class="form-control"
+                      type="text"
+                      :id="'sweeting_level'+index"
+                      v-model="good.sweetness_level"
+                    >
+                      <option value="正常" selected>正常</option>
+                      <option value="少糖">少糖</option>
+                      <option value="半糖">半糖</option>
+                      <option value="微糖">微糖</option>
+                      <option value="無糖">無糖</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label :for="'amount_of_icd'+index">冰量</label>
+                    <select
+                      class="form-control"
+                      type="text"
+                      :id="'amount_of_icd'+index"
+                      v-model="good.amount_of_ice"
+                    >
+                      <option value="正常" selected>正常</option>
+                      <option value="少冰">少冰</option>
+                      <option value="去冰">去冰</option>
+                      <option value="微冰">微冰</option>
+                      <option value="去冰">去冰</option>
+                      <option value="完全去冰">完全去冰</option>
+                      <option value="熱的">熱的</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label :for="'size'+index">大小</label>
+                    <select class="form-control" type="text" :id="'size'+index" v-model="good.size">
+                      <option value="L" selected>L</option>
+                      <option value="M">M</option>
+                      <option value="S">S</option>
+                      <option value="XL">XL</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label :for="'number'+index">數量</label>
+                    <select
+                      class="form-control"
+                      type="number"
+                      :id="'number'+index"
+                      v-model="good.number"
+                    >
+                      <option value="1" selected>1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label :for="'comment'+index">備註</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      :id="'comment'+index"
+                      placeholder="(Optional) 想附註的事"
+                      v-model="good.comment"
+                    />
+                  </div>
+                </div>
+                <div class="col-md text-center">
+                  <button
+                    type="button"
+                    class="btn-sm btn-outline-danger btn-block"
+                    @click="destory_good(good)"
+                  >移除</button>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label :for="'sweeting_level'+index">甜度</label>
-                  <select
-                    class="form-control"
-                    type="text"
-                    :id="'sweeting_level'+index"
-                    v-model="good.sweetness_level"
-                  >
-                    <option value="正常" selected>正常</option>
-                    <option value="少糖">少糖</option>
-                    <option value="半糖">半糖</option>
-                    <option value="微糖">微糖</option>
-                    <option value="無糖">無糖</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label :for="'amount_of_icd'+index">冰量</label>
-                  <select
-                    class="form-control"
-                    type="text"
-                    :id="'amount_of_icd'+index"
-                    v-model="good.amount_of_ice"
-                  >
-                    <option value="正常" selected>正常</option>
-                    <option value="少冰">少冰</option>
-                    <option value="去冰">去冰</option>
-                    <option value="微冰">微冰</option>
-                    <option value="去冰">去冰</option>
-                    <option value="完全去冰">完全去冰</option>
-                    <option value="熱的">熱的</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label :for="'size'+index">大小</label>
-                  <select class="form-control" type="text" :id="'size'+index" v-model="good.size">
-                    <option value="L" selected>L</option>
-                    <option value="M">M</option>
-                    <option value="S">S</option>
-                    <option value="XL">XL</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label :for="'number'+index">數量</label>
-                  <select
-                    class="form-control"
-                    type="number"
-                    :id="'number'+index"
-                    v-model="good.number"
-                  >
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label :for="'comment'+index">備註</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    :id="'comment'+index"
-                    placeholder="(Optional) 想附註的事"
-                    v-model="good.comment"
-                  />
-                </div>
-              </div>
-              <div class="col-md text-center">
-                <button
-                  type="button"
-                  class="btn-sm btn-outline-danger btn-block"
-                  @click="destory_good(good)"
-                >移除</button>
-              </div>
-            </div>
 
-            <!--end goods-->
+              <!--end goods-->
 
-            <div class="row">
-              <div class="col text-center m-3">
-                <button
-                  type="button"
-                  class="btn btn-outline-success btn-block"
-                  @click="create_new_good"
-                >新增一個新的品項</button>
+              <div class="row">
+                <div class="col text-center m-3">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-block"
+                    :class="{'bounce animated': animated}"
+                    @click="create_new_good()"
+                  >新增一個新的品項</button>
+                </div>
               </div>
-            </div>
-            <div class="d-flex justify-content-center my-2">
-              <button type="reset" class="btn btn-outline-danger mx-2" @click="clean_goods">清除</button>
-              <button
-                type="button"
-                class="btn btn-success mx-2"
-                data-toggle="modal"
-                data-target="#sumitModal"
-              >送出</button>
-            </div>
-          </form>
+              <div class="d-flex justify-content-center my-2">
+                <button type="reset" class="btn btn-outline-danger mx-2" @click="clean_goods()">清除</button>
+                <button type="submit" class="btn btn-success mx-2">送出</button>
+              </div>
+            </form>
+          </ValidationObserver>
         </div>
       </div>
     </div>
-    <SumitCheck id="sumitModal" :record="record" />
+    <OrderComfirm id="comfirmModal" :record="record" />
   </div>
 </template>
 
 <script>
-import SumitCheck from "@/components/SumitCheck.vue";
+import OrderComfirm from "@/components/OrderComfirm.vue";
+
+import $ from "jquery";
+
 export default {
   name: "OrderEditor",
-  components: { SumitCheck },
+  components: { OrderComfirm },
   props: ["record"],
+  data() {
+    return {
+      animated: false
+    };
+  },
   methods: {
     create_new_good() {
-      var new_id = Math.floor(Date.now());
-      this.record.goods.push({
-        id: new_id,
+      this.$store.dispatch("add_good", {
         item_name: "",
         sweetness_level: "正常",
         amount_of_ice: "正常",
@@ -163,17 +171,27 @@ export default {
         comment: ""
       });
     },
-    destory_good: function(good) {
-      var index = this.record.goods.findIndex(function(_good) {
-        return good.id == _good.id;
-      });
-      this.record.goods.splice(index, 1);
+    destory_good(good) {
+      this.$store.dispatch("remove_good", good.id);
     },
-
     clean_goods() {
-      let goods = this.record.goods;
-      goods.splice(0, goods.length);
+      this.$store.dispatch("remove_all_goods");
+    },
+    submit() {
+      let vm = this;
+      if (vm.record.goods.length > 0) {
+        console.log("show check madol");
+        $("#comfirmModal").modal("show");
+      } else {
+        vm.animated = true;
+        setTimeout(function() {
+          vm.animated = false;
+        }, 1000);
+      }
     }
   }
 };
 </script>
+
+<style scoped>
+</style>
