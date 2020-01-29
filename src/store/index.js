@@ -102,9 +102,14 @@ export default new Vuex.Store({
             const url = new URL(String(vm.state.gid) + "/orders", base_url).toString()
             context.commit('SET_IS_LOADING', true);
             axios.get(url).then(resp => {
+                let userid = vm.state.uid
                 context.commit('GET_RECORDS', resp.data);
+                if (resp.data.hasOwnProperty(vm.state.uid)) {
+                    context.commit('SET_GOODS', resp.data[userid].goods);
+                }
                 context.commit('SET_IS_LOADING', false);
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
                 context.commit('SET_IS_LOADING', false);
             })
         },
@@ -131,6 +136,9 @@ export default new Vuex.Store({
                     state.current_goods.splice(i, 1);
                 }
             });
+        },
+        SET_GOODS(state, payload) {
+            state.current_goods = payload;
         },
         GOODS_SAME_AS(state, payload) {
             state.current_goods.splice(0, state.current_goods.length);

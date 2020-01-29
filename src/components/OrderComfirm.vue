@@ -66,7 +66,6 @@ export default {
         String(vm.$store.state.gid) + "/order/" + String(vm.$store.state.uid),
         base_url
       ).toString();
-      console.log("Send Order", url);
       vm.$http
         .post(url, vm.record)
         .then(resp => {

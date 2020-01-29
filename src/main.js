@@ -5,7 +5,7 @@ import VueAxios from 'vue-axios'
 import VueLoading from "vue-loading-overlay";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faLine } from '@fortawesome/free-brands-svg-icons'
+import { faLine, faCloudsmith } from '@fortawesome/free-brands-svg-icons'
 import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate';
 import zh_TW from 'vee-validate/dist/locale/zh_TW.json';
 import * as rules from 'vee-validate/dist/rules';
@@ -25,6 +25,7 @@ Object.keys(rules).forEach(rule => {
 localize('zh_TW', zh_TW);
 
 library.add(faLine)
+library.add(faCloudsmith)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.use(animated)

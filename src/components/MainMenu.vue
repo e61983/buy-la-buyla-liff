@@ -46,6 +46,11 @@ export default {
   props: {
     title: String
   },
+  data() {
+    return {
+      is_open_editor: false
+    };
+  },
   created() {
     console.log(this.$options.name, "created");
   },
@@ -58,12 +63,20 @@ export default {
     this.$store.dispatch("get_liff_context");
     this.$store.dispatch("get_user_profile");
     this.$store.dispatch("get_records");
-    this.$store.dispatch("get_current_record");
     this.$store.dispatch("set_is_loading", false);
   },
   computed: {
     records() {
-      return this.$store.state.records;
+      let vm = this;
+      let rs = vm.$store.state.records;
+      if (rs === null) return  null
+      let list = [];
+      Object.keys(rs).forEach(uid => {
+        if (uid !== vm.$store.state.uid) {
+          list.push(rs[uid]);
+        }
+      });
+      return list;
     },
     liff_context() {
       return this.$store.state.liff_context;
