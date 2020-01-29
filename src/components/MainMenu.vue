@@ -1,7 +1,7 @@
 <template>
   <div class="row text-center">
     <div class="col card">
-      <div class="card-body">
+      <div class="card-body p-0">
         <div class="row">
           <!-- current record -->
           <div class="col-12" v-if="current_record !== null">
@@ -60,7 +60,6 @@ export default {
   mounted() {
     console.log(this.$options.name, "mounted");
     this.$store.dispatch("set_is_loading", true);
-    this.$store.dispatch("get_liff_context");
     this.$store.dispatch("get_user_profile");
     this.$store.dispatch("get_records");
     this.$store.dispatch("set_is_loading", false);
@@ -69,7 +68,7 @@ export default {
     records() {
       let vm = this;
       let rs = vm.$store.state.records;
-      if (rs === null) return  null
+      if (rs === null) return null;
       let list = [];
       Object.keys(rs).forEach(uid => {
         if (uid !== vm.$store.state.uid) {

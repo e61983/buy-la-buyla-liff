@@ -4,10 +4,12 @@ const port = 8080
 const webpack = require('webpack');
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/static/'
+    : '/',
   devServer: {
     host: host,
     port: port,
-    publicPath: '/',
     disableHostCheck: true,
     hotOnly: false,
     headers: {

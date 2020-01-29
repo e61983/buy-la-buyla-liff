@@ -26,6 +26,7 @@ export default new Vuex.Store({
         uid: "",
         records: null,
         current_goods: [],
+        order_status: "empty",
         messages: [],
     },
     actions: {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
         },
         set_gid(context, payload) {
             context.commit('SET_GID', payload);
+        },
+        set_order_status(context, payload) {
+            context.commit('SET_ORDER_STATUS', payload);
         },
         add_good(context, payload) {
             payload.id = new_timestamp()
@@ -105,7 +109,10 @@ export default new Vuex.Store({
                 let userid = vm.state.uid
                 context.commit('GET_RECORDS', resp.data);
                 if (resp.data.hasOwnProperty(vm.state.uid)) {
+                    context.commit('SET_ORDER_STATUS', 'exist');
                     context.commit('SET_GOODS', resp.data[userid].goods);
+                } else {
+                    context.commit('SET_ORDER_STATUS', 'empty');
                 }
                 context.commit('SET_IS_LOADING', false);
             }).catch((err) => {
@@ -127,6 +134,9 @@ export default new Vuex.Store({
         SET_GID(state, payload) {
             state.gid = payload
         },
+        SET_ORDER_STATUS(state, payload) {
+            state.order_status = payload
+        },
         ADD_GOOD(state, payload) {
             state.current_goods.push(payload);
         },
@@ -138,7 +148,7 @@ export default new Vuex.Store({
             });
         },
         SET_GOODS(state, payload) {
-            state.current_goods = payload;
+            state.current_goods = JSON.parse(JSON.stringify(payload));
         },
         GOODS_SAME_AS(state, payload) {
             state.current_goods.splice(0, state.current_goods.length);

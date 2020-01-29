@@ -15,7 +15,12 @@
         <div class="border" style="border-radius: 5px;">
           <ValidationObserver v-slot="{ handleSubmit, reset  }">
             <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset">
-              <OrderItem :good="good" v-for="(good,index) in record.goods" :key="good.id" :index=index />
+              <OrderItem
+                :good="good"
+                v-for="(good,index) in record.goods"
+                :key="good.id"
+                :index="index"
+              />
               <div class="row">
                 <div class="col text-center m-3">
                   <button
@@ -27,8 +32,18 @@
                 </div>
               </div>
               <div class="d-flex justify-content-center my-2">
-                <button type="reset" class="btn btn-outline-danger mx-2" @click="clean_goods()">清除</button>
-                <button type="submit" class="btn btn-success mx-2">送出</button>
+                <button
+                  type="reset"
+                  class="btn btn-outline-secondary mx-2"
+                  @click="reset_goods()"
+                >重置</button>
+                <button v-if="order_status==='new'" type="submit" class="btn btn-success mx-2">送出</button>
+                <button v-if="order_status==='modify'" type="submit" class="btn btn-success mx-2">修改</button>
+                <button
+                  v-if="order_status==='delete'"
+                  type="submit"
+                  class="btn btn-danger mx-2"
+                >我不要了</button>
               </div>
             </form>
           </ValidationObserver>
@@ -54,6 +69,21 @@ export default {
       animated: false
     };
   },
+  computed: {
+    order_status() {
+      let status = this.$store.state.order_status;
+      let goods_number = this.record.goods.length;
+      if (status === "exist") {
+        if (goods_number > 0) {
+          return "modify";
+        } else {
+          return "delete";
+        }
+      } else {
+        return "new";
+      }
+    }
+  },
   methods: {
     create_new_good() {
       this.$store.dispatch("add_good", {
@@ -65,19 +95,22 @@ export default {
         comment: ""
       });
     },
-    clean_goods() {
-      this.$store.dispatch("remove_all_goods");
+    reset_goods() {
+      this.$store.dispatch("get_records");
     },
     submit() {
       let vm = this;
-      if (vm.record.goods.length > 0) {
+      let status = vm.$store.state.order_status;
+      if (status === "new") {
+        if (vm.record.goods.length <= 0) {
+          vm.animated = true;
+          setTimeout(function() {
+            vm.animated = false;
+          }, 1000);
+        }
+      } else {
         console.log("show check madol");
         $("#comfirmModal").modal("show");
-      } else {
-        vm.animated = true;
-        setTimeout(function() {
-          vm.animated = false;
-        }, 1000);
       }
     }
   }

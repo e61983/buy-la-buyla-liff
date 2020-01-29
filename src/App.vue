@@ -48,6 +48,7 @@ export default {
           liffId: process.env.VUE_APP_LIFF_ID
         },
         () => {
+          vm.$store.dispatch('get_liff_context')
           vm.$store.dispatch('set_is_loading',false)
           vm.initialized = true;
         },

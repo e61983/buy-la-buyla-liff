@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100">
+  <div class="container">
     <div v-if="is_editor" class="form-row mx-sm-2 mx-1 mt-2 border" style="border-radius: 5px;">
       <!-- editor -->
       <div class="col-12">
@@ -96,17 +96,18 @@
         >移除</button>
       </div>
     </div>
-    <div v-else class="form-row mx-sm-2 mx-1 mt-2 border">
+    <div v-else class="row ">
       <div class="col-9 d-flex align-items-center">
-        <font-awesome-icon :icon="['fab', 'cloudsmith']" class="mr-2" />
-        <div>
-          {{good.item_name}} {{good.sweetness_level}} {{good.amount_of_ice}} {{good.size}} *
-          {{good.number}}
-          ({{good.comment}})
-        </div>
+        <ul class="mb-0" :key="sub_index">
+          <li>
+            {{good.item_name}} {{good.sweetness_level}} {{good.amount_of_ice}} {{good.size}} *
+            {{good.number}} ({{good.comment}})
+          </li>
+        </ul>
       </div>
       <div class="col-3">
-        <button type="button" class="btn btn-success btn-block" @click="edit()">Edit</button>
+        <a href="#" class="badge badge-success mr-0" @click="edit()">修改</a>
+        <a href="#" class="badge badge-danger mr-0" @click="destory_good(good)">移除</a>
       </div>
     </div>
     <!-- viewer -->
@@ -116,16 +117,16 @@
 <script>
 export default {
   name: "OrderItem",
-  props: ["good", 'index'],
+  props: ["good", "index"],
   data() {
     return {
       is_editor: true
     };
   },
-  created(){
-    if (this.good.item_name === ""){
+  created() {
+    if (this.good.item_name === "") {
       this.is_editor = true;
-    }else{
+    } else {
       this.is_editor = false;
     }
   },
