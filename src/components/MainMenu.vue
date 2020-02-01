@@ -1,40 +1,36 @@
 <template>
-  <div class="row text-center">
-    <div class="col card">
-      <div class="card-body p-0">
-        <div class="row">
-          <!-- current record -->
-          <div class="col-12" v-if="current_record !== null">
-            <OrderEditor :record="current_record" />
-          </div>
-
-          <!-- records -->
-          <div class="col-12" v-if="records !==null">
-            <div v-for="(record, index) in records" :key="index">
-              <Record :record="record" />
-            </div>
-          </div>
-        </div>
+  <section>
+    <div class="row">
+      <!-- current record -->
+      <div class="col-12" v-if="current_record !== null">
+        <OrderEditor :record="current_record" />
       </div>
-      <!-- context information -->
-      <div class="card-footer bg-transparent text-left">
-        <font-awesome-icon
-          :icon="['fab', 'line']"
-          class="fab fa-line"
-          :class="{ 'text-success': liff_context !== null, 'text-secondary': liff_context === null }"
-          data-toggle="collapse"
-          data-target="#context"
-          role="button"
-        />
-        <div class="collapse multi-collapse" id="context">
-          <div class="card card-body">
-            <span>liff context: {{ liff_context }}</span>
-            <span>order group: {{ order_group }}</span>
-          </div>
+
+      <!-- records -->
+      <div class="col-12" v-if="records !==null">
+        <div v-for="(record, index) in records" :key="index">
+          <Record :record="record" />
         </div>
       </div>
     </div>
-  </div>
+    <!-- context information -->
+    <div class="text-left">
+      <font-awesome-icon
+        :icon="['fab', 'line']"
+        class="fab fa-line"
+        :class="{ 'text-success': liff_context !== null, 'text-secondary': liff_context === null }"
+        data-toggle="collapse"
+        data-target="#context"
+        role="button"
+      />
+      <div class="collapse multi-collapse" id="context">
+        <div class="card card-body">
+          <span>liff context: {{ liff_context }}</span>
+          <span>order group: {{ order_group }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -60,8 +56,6 @@ export default {
   mounted() {
     console.log(this.$options.name, "mounted");
     this.$store.dispatch("set_is_loading", true);
-    this.$store.dispatch("get_user_profile");
-    this.$store.dispatch("get_records");
     this.$store.dispatch("set_is_loading", false);
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div v-if="is_editor" class="form-row mx-sm-2 mx-1 mt-2 border" style="border-radius: 5px;">
+  <div class="my-1">
+    <div v-if="is_editor" class="form-row border text-left" style="border-radius: 5px;">
       <!-- editor -->
       <div class="col-12">
         <div class="form-group">
@@ -17,7 +17,7 @@
           </ValidationProvider>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-6 col-md-3">
         <div class="form-group">
           <label :for="'sweeting_level'+index">甜度</label>
           <select
@@ -34,7 +34,7 @@
           </select>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-6 col-md-3">
         <div class="form-group">
           <label :for="'amount_of_icd'+index">冰量</label>
           <select
@@ -53,7 +53,7 @@
           </select>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-6 col-md-3">
         <div class="form-group">
           <label :for="'size'+index">大小</label>
           <select class="form-control" type="text" :id="'size'+index" v-model="good.size">
@@ -64,20 +64,14 @@
           </select>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-6 col-md-3">
         <div class="form-group">
           <label :for="'number'+index">數量</label>
-          <select class="form-control" type="number" :id="'number'+index" v-model="good.number">
-            <option value="1" selected>1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+          <input class="form-control" type="number" :id="'number'+index" v-model="good.number" />
         </div>
       </div>
       <div class="col-12">
-        <div class="form-group">
+        <div class="form-group mb-0">
           <label :for="'comment'+index">備註</label>
           <input
             class="form-control"
@@ -88,26 +82,31 @@
           />
         </div>
       </div>
-      <div class="col-md text-center">
+      <div class="col-md m-2 text-center">
         <button
           type="button"
-          class="btn-sm btn-outline-danger btn-block"
+          class="btn btn-sm btn-outline-success btn-block"
+          @click="triggor_editor()"
+        >確認</button>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger btn-block"
           @click="destory_good(good)"
         >移除</button>
       </div>
     </div>
-    <div v-else class="row ">
-      <div class="col-9 d-flex align-items-center">
-        <ul class="mb-0" :key="sub_index">
-          <li>
-            {{good.item_name}} {{good.sweetness_level}} {{good.amount_of_ice}} {{good.size}} *
-            {{good.number}} ({{good.comment}})
-          </li>
-        </ul>
-      </div>
-      <div class="col-3">
-        <a href="#" class="badge badge-success mr-0" @click="edit()">修改</a>
-        <a href="#" class="badge badge-danger mr-0" @click="destory_good(good)">移除</a>
+    <div v-else class="row align-items-center flex-column">
+      <div class="col-12 text-left">
+        <div>
+          {{good.item_name}} {{good.sweetness_level}} {{good.amount_of_ice}} {{good.size}} *
+          {{good.number}}
+          <a
+            href="#"
+            class="badge badge-success mr-0"
+            @click="triggor_editor()"
+          >修改</a>
+          <a href="#" class="badge badge-danger mr-0" @click="destory_good(good)">移除</a>
+        </div>
       </div>
     </div>
     <!-- viewer -->
@@ -131,7 +130,7 @@ export default {
     }
   },
   methods: {
-    edit() {
+    triggor_editor() {
       this.is_editor = !this.is_editor;
     },
     destory_good(good) {

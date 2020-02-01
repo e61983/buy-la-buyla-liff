@@ -105,6 +105,7 @@ export default new Vuex.Store({
             const base_url = process.env.VUE_APP_API_SERVER_BASE;
             const url = new URL(String(vm.state.gid) + "/orders", base_url).toString()
             context.commit('SET_IS_LOADING', true);
+            console.log(url)
             axios.get(url).then(resp => {
                 let userid = vm.state.uid
                 context.commit('GET_RECORDS', resp.data);
@@ -152,9 +153,11 @@ export default new Vuex.Store({
         },
         GOODS_SAME_AS(state, payload) {
             state.current_goods.splice(0, state.current_goods.length);
+
             payload.forEach((good) => {
-                good.id = new_timestamp()
-                state.current_goods.push(good);
+                let clone_good = JSON.parse(JSON.stringify(good));
+                clone_good.id = new_timestamp()
+                state.current_goods.push(clone_good);
             });
         },
         REMOVE_ALL_GOODS(state) {

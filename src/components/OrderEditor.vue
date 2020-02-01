@@ -1,55 +1,34 @@
 <template>
-  <div class="container">
-    <div class="row mb-2 align-items-center">
-      <div class="col-md-3 col-12 text-center">
-        <img
-          :src="record.user_profile.photo_url"
-          width="128px"
-          height="128px"
-          class="mx-1"
-          style="border-radius:100%"
-        />
-        <div class="h5">{{record.user_profile.display_name}}</div>
-      </div>
-      <div class="col-md-9 col-12">
-        <div class="border" style="border-radius: 5px;">
-          <ValidationObserver v-slot="{ handleSubmit, reset  }">
-            <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset">
-              <OrderItem
-                :good="good"
-                v-for="(good,index) in record.goods"
-                :key="good.id"
-                :index="index"
-              />
-              <div class="row">
-                <div class="col text-center m-3">
-                  <button
-                    type="button"
-                    class="btn btn-outline-success btn-block"
-                    :class="{'bounce animated': animated}"
-                    @click="create_new_good()"
-                  >新增一個新的品項</button>
-                </div>
-              </div>
-              <div class="d-flex justify-content-center my-2">
-                <button
-                  type="reset"
-                  class="btn btn-outline-secondary mx-2"
-                  @click="reset_goods()"
-                >重置</button>
-                <button v-if="order_status==='new'" type="submit" class="btn btn-success mx-2">送出</button>
-                <button v-if="order_status==='modify'" type="submit" class="btn btn-success mx-2">修改</button>
-                <button
-                  v-if="order_status==='delete'"
-                  type="submit"
-                  class="btn btn-danger mx-2"
-                >我不要了</button>
-              </div>
-            </form>
-          </ValidationObserver>
-        </div>
-      </div>
+  <div class="row d-flex flex-row text-center border mt-2" style="border-radius:5%">
+    <div class="col-md-3 col-12 text-center">
+      <img
+        :src="record.user_profile.photo_url"
+        width="128px"
+        height="128px"
+        class="mx-1"
+        style="border-radius:100%"
+      />
+      <div class="h5">{{record.user_profile.display_name}}</div>
     </div>
+    <ValidationObserver class="col justify-content-center" v-slot="{ handleSubmit, reset  }">
+      <form @submit.prevent="handleSubmit(submit)" @reset.prevent="reset">
+        <OrderItem :good="good" v-for="(good,index) in record.goods" :key="good.id" :index="index" />
+        <div class="col text-center">
+          <button
+            type="button"
+            class="btn btn-outline-success btn-block mt-2"
+            :class="{'bounce animated': animated}"
+            @click="create_new_good()"
+          >新增一個新的品項</button>
+        </div>
+        <div class="col text-center">
+          <button type="reset" class="btn btn-outline-secondary m-1" @click="reset_goods()">重置</button>
+          <button v-if="order_status==='new'" type="submit" class="btn btn-success m-1">送出</button>
+          <button v-if="order_status==='modify'" type="submit" class="btn btn-success m-1">修改</button>
+          <button v-if="order_status==='delete'" type="submit" class="btn btn-danger m-1">我不要了</button>
+        </div>
+      </form>
+    </ValidationObserver>
     <OrderComfirm id="comfirmModal" :record="record" />
   </div>
 </template>

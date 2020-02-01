@@ -133,6 +133,7 @@ export default {
         .delete(url)
         .then(resp => {
           console.log("Result", resp);
+          vm.$store.dispatch("set_order_status", "empty");
           $("#" + vm.id).modal("hide");
         })
         .then(() => {
