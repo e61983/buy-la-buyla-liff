@@ -14,7 +14,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "animate.css": "^3.7.2",
     "animate.min.css": "^0.0.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "core-js": "^3.4.4",
     "file-loader": "^5.0.2",
